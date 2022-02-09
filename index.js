@@ -31,8 +31,6 @@ var IntersectionCosts;
     IntersectionCosts[IntersectionCosts["ROUND_ABOUT"] = 100000] = "ROUND_ABOUT";
     IntersectionCosts[IntersectionCosts["TRAFFIC_LIGHTS"] = 200000] = "TRAFFIC_LIGHTS";
 })(IntersectionCosts || (IntersectionCosts = {}));
-var continuousFunctions = function () {
-};
 function findTrafficSolution(roads) {
     var roundaboutMap = new Map([
         ["low", 0.9],
@@ -48,11 +46,6 @@ function findTrafficSolution(roads) {
         ["low", 0.4],
         ["medium", 0.3],
         ["high", 0.2],
-    ]);
-    var intersectionCosts = new Map([
-        ["stopSign", 40000],
-        ["roundabouts", 100000],
-        ["trafficLights", 200000],
     ]);
     var roundaboutEfficiancy = 1;
     var trafficLightefficiancy = 1;
@@ -101,10 +94,11 @@ function findTrafficSolution(roads) {
         console.log("A traffic light system is the most efficiant solution");
     }
     var totalRoadCPM = roads.reduce(function (i, j) { return i + j; });
-    console.log("roundabout eff: ", roundaboutEfficiancy, "RoundAbout CPM/ $", totalRoadCPM * IntersectionCosts.ROUND_ABOUT);
-    console.log("traffic light eff: ", trafficLightefficiancy, "Traffic Light CPM/ $", totalRoadCPM * IntersectionCosts.TRAFFIC_LIGHTS);
-    console.log("stop sign eff: ", stopSignEfficiancy, "Stop Sign CPM/ $", totalRoadCPM * IntersectionCosts.STOP_SIGN);
+    console.log("roundabout eff:", roundaboutEfficiancy, "RoundAbout CPM/$: ", IntersectionCosts.ROUND_ABOUT / totalRoadCPM);
+    console.log("traffic light eff:", trafficLightefficiancy, "Traffic Light CPM/$:", IntersectionCosts.TRAFFIC_LIGHTS / totalRoadCPM);
+    console.log("stop sign eff:", stopSignEfficiancy, "Stop Sign CPM/$:", IntersectionCosts.STOP_SIGN / totalRoadCPM);
     return;
 }
+//  UNCOMMENT TO TEST
 findTrafficSolutionWithArgs();
 // findTrafficSolutionFromCSV("./data.csv");

@@ -101,9 +101,9 @@ function findTrafficSolution(roads: Array<number>) {
   }
 
   let totalRoadCPM = roads.reduce((i, j) => i + j);
-  console.log("roundabout eff:", roundaboutEfficiancy, "RoundAbout CPM/$: ", totalRoadCPM * IntersectionCosts.ROUND_ABOUT);
-  console.log("traffic light eff:", trafficLightefficiancy, "Traffic Light CPM/$:", totalRoadCPM * IntersectionCosts.TRAFFIC_LIGHTS);
-  console.log("stop sign eff:", stopSignEfficiancy, "Stop Sign CPM/$:", totalRoadCPM * IntersectionCosts.STOP_SIGN);
+  console.log("roundabout eff:", roundaboutEfficiancy, "RoundAbout CPM/$: ", IntersectionCosts.ROUND_ABOUT / totalRoadCPM);
+  console.log("traffic light eff:", trafficLightefficiancy, "Traffic Light CPM/$:", IntersectionCosts.TRAFFIC_LIGHTS / totalRoadCPM);
+  console.log("stop sign eff:", stopSignEfficiancy, "Stop Sign CPM/$:",IntersectionCosts.STOP_SIGN / totalRoadCPM);
 
   return;
 }
