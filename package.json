@@ -1,11 +1,15 @@
 {
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
   "dependencies": {
     "@types/node": "^17.0.16",
+    "csv-parse": "^5.0.4",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
   },
   "name": "CometTestEnviro",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT"
 }
