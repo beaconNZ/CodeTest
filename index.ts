@@ -26,6 +26,12 @@ const findTrafficSolutionWithArgs = () => {
   findTrafficSolution(roads);
 };
 
+enum IntersectionCosts {
+    STOP_SIGN = 40000,
+    ROUND_ABOUT = 100000,
+    TRAFFIC_LIGHTS = 200000,
+  }
+
 function findTrafficSolution(roads: Array<number>) {
   const roundaboutMap = new Map<string, number>([
     ["low", 0.9],
@@ -41,6 +47,11 @@ function findTrafficSolution(roads: Array<number>) {
     ["low", 0.4],
     ["medium", 0.3],
     ["high", 0.2],
+  ]);
+  const intersectionCosts = new Map<string, number>([
+    ["stopSign", 40000],
+    ["roundabouts", 100000],
+    ["trafficLights", 200000],
   ]);
 
   let roundaboutEfficiancy = 1;
@@ -93,9 +104,10 @@ function findTrafficSolution(roads: Array<number>) {
     console.log("A traffic light system is the most efficiant solution");
   }
 
-  console.log("roundabout eff: ", roundaboutEfficiancy);
-  console.log("traffic light eff: ", trafficLightefficiancy);
-  console.log("stop sign eff: ", stopSignEfficiancy);
+  let totalRoadCPM = roads.reduce((i, j) => i + j);
+  console.log("roundabout eff: ", roundaboutEfficiancy, "RoundAbout CPM/ $", totalRoadCPM * IntersectionCosts.ROUND_ABOUT);
+  console.log("traffic light eff: ", trafficLightefficiancy, "Traffic Light CPM/ $", totalRoadCPM * IntersectionCosts.TRAFFIC_LIGHTS);
+  console.log("stop sign eff: ", stopSignEfficiancy, "Stop Sign CPM/ $", totalRoadCPM * IntersectionCosts.STOP_SIGN);
 
   return;
 }
