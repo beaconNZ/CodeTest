@@ -18,13 +18,20 @@ var findTrafficSolutionFromCSV = function (fileLocaiton) {
         });
     });
 };
-findTrafficSolutionFromCSV("./data.csv");
 var findTrafficSolutionWithArgs = function () {
     var myArgs = process.argv.slice(2);
     var roads = myArgs.map(function (numString) {
         return parseInt(numString, 10);
     });
     findTrafficSolution(roads);
+};
+var IntersectionCosts;
+(function (IntersectionCosts) {
+    IntersectionCosts[IntersectionCosts["STOP_SIGN"] = 40000] = "STOP_SIGN";
+    IntersectionCosts[IntersectionCosts["ROUND_ABOUT"] = 100000] = "ROUND_ABOUT";
+    IntersectionCosts[IntersectionCosts["TRAFFIC_LIGHTS"] = 200000] = "TRAFFIC_LIGHTS";
+})(IntersectionCosts || (IntersectionCosts = {}));
+var continuousFunctions = function () {
 };
 function findTrafficSolution(roads) {
     var roundaboutMap = new Map([
@@ -41,6 +48,11 @@ function findTrafficSolution(roads) {
         ["low", 0.4],
         ["medium", 0.3],
         ["high", 0.2],
+    ]);
+    var intersectionCosts = new Map([
+        ["stopSign", 40000],
+        ["roundabouts", 100000],
+        ["trafficLights", 200000],
     ]);
     var roundaboutEfficiancy = 1;
     var trafficLightefficiancy = 1;
@@ -65,10 +77,16 @@ function findTrafficSolution(roads) {
                 calcEfficiancy += road * ((_c = map.get("high")) !== null && _c !== void 0 ? _c : 0);
             }
         });
-        console.log(calcEfficiancy);
         return calcEfficiancy;
     };
     roundaboutEfficiancy = testEfficiancy(roundaboutMap);
+    //test for high CPM relativity for roundAbout bonus
+    var roadX = roads[0] + roads[2];
+    var roadY = roads[1] + roads[3];
+    if (roadX / roadY >= 2 || roadX / roadY < 0.5) {
+        //If one road is 2x the other call that high relativity
+        roundaboutEfficiancy *= 1.1;
+    }
     stopSignEfficiancy = testEfficiancy(stopSignMap);
     trafficLightefficiancy = testEfficiancy(trafficLightMap);
     console.log("road values: ", roads[0], roads[1], roads[2], roads[3]);
@@ -82,8 +100,11 @@ function findTrafficSolution(roads) {
     else {
         console.log("A traffic light system is the most efficiant solution");
     }
-    console.log("roundabout eff: ", roundaboutEfficiancy);
-    console.log("traffic light eff: ", trafficLightefficiancy);
-    console.log("stop sign eff: ", stopSignEfficiancy);
+    var totalRoadCPM = roads.reduce(function (i, j) { return i + j; });
+    console.log("roundabout eff: ", roundaboutEfficiancy, "RoundAbout CPM/ $", totalRoadCPM * IntersectionCosts.ROUND_ABOUT);
+    console.log("traffic light eff: ", trafficLightefficiancy, "Traffic Light CPM/ $", totalRoadCPM * IntersectionCosts.TRAFFIC_LIGHTS);
+    console.log("stop sign eff: ", stopSignEfficiancy, "Stop Sign CPM/ $", totalRoadCPM * IntersectionCosts.STOP_SIGN);
     return;
 }
+findTrafficSolutionWithArgs();
+// findTrafficSolutionFromCSV("./data.csv");
