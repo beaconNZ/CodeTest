@@ -5,21 +5,18 @@ const findTrafficSolutionFromCSV = (fileLocaiton: string) => {
   var csvData: Array<Array<string>> = [];
   fs.createReadStream(fileLocaiton)
     .pipe(parse({ delimiter: ":" }))
-    .on("data", function (csvrow : Array<String>) {
-      csvData.push( csvrow[0].split(","));
+    .on("data", function (csvrow: Array<String>) {
+      csvData.push(csvrow[0].split(","));
     })
     .on("end", function () {
       csvData.forEach((roadEntry) => {
         const roads: Array<number> = roadEntry.map((numString) => {
-            return parseInt(numString, 10);
-          });
-          findTrafficSolution(roads);
-      })
+          return parseInt(numString, 10);
+        });
+        findTrafficSolution(roads);
+      });
     });
-
 };
-
-findTrafficSolutionFromCSV("./data.csv");
 
 const findTrafficSolutionWithArgs = () => {
   const myArgs = process.argv.slice(2);
@@ -72,6 +69,14 @@ function findTrafficSolution(roads: Array<number>) {
   };
 
   roundaboutEfficiancy = testEfficiancy(roundaboutMap);
+  //test for high CPM relativity for roundAbout bonus
+  let roadX: number = roads[0] + roads[2];
+  let roadY: number = roads[1] + roads[3];
+
+  if (roadX / roadY >= 2 || roadX / roadY < 0.5) {
+    //If one road is 2x the other call that high relativity
+    roundaboutEfficiancy *= 1.1;
+  }
   stopSignEfficiancy = testEfficiancy(stopSignMap);
   trafficLightefficiancy = testEfficiancy(trafficLightMap);
 
@@ -94,3 +99,6 @@ function findTrafficSolution(roads: Array<number>) {
 
   return;
 }
+
+// findTrafficSolutionWithArgs();
+// findTrafficSolutionFromCSV("./data.csv");
